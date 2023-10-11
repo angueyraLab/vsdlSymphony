@@ -1,4 +1,4 @@
-classdef iLEDPulse< squirrellab.protocols.SquirrelLabProtocol
+classdef iLEDPulse< vsdLab.protocols.vsdLabProtocol
     % LED pulse while doing 2P imaging and not using electrophysiology
     % amplififer
     % Will still collect frame timing and temperature
@@ -69,7 +69,7 @@ classdef iLEDPulse< squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabProtocol(obj, epoch);
             
             % generate trigger
             trigger = obj.rig.getDevices('Trigger');

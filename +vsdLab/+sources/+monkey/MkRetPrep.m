@@ -1,10 +1,10 @@
-classdef MkRetPrep < squirrellab.sources.RetPrep
+classdef MkRetPrep < vsdLab.sources.RetPrep
     
     methods
         
         function obj = MkRetPrep()
             import symphonyui.core.*;
-            obj.addAllowableParentType('squirrellab.sources.monkey.Monkey');
+            obj.addAllowableParentType('vsdLab.sources.monkey.Monkey');
         end
         
     end

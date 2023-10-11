@@ -1,4 +1,4 @@
-classdef Zebrafish < squirrellab.sources.Subject
+classdef Zebrafish < vsdLab.sources.Subject
     
     methods
         

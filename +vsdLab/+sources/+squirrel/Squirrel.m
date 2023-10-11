@@ -1,4 +1,4 @@
-classdef Squirrel < squirrellab.sources.Subject
+classdef Squirrel < vsdLab.sources.Subject
     
     methods
         

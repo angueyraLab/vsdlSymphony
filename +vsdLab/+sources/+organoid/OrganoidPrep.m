@@ -1,10 +1,10 @@
-classdef OrganoidPrep < squirrellab.sources.RetPrep
+classdef OrganoidPrep < vsdLab.sources.RetPrep
     
     methods
         
         function obj = OrganoidPrep()
             import symphonyui.core.*;
-            obj.addAllowableParentType('squirrellab.sources.organoid.Organoid');
+            obj.addAllowableParentType('vsdLab.sources.organoid.Organoid');
         end
         
     end

@@ -1,4 +1,4 @@
-classdef vRamp < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.protocols.SquirrelLabAutoRCNoiseSineProtocol
+classdef vRamp < vsdLab.protocols.vsdLabAutoRCProtocol %vsdLab.protocols.vsdLabAutoRCNoiseSineProtocol
     
     properties
         amp                             % Output amplifier
@@ -19,8 +19,8 @@ classdef vRamp < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.pr
     methods
         
         function didSetRig(obj)
-%             didSetRig@squirrellab.protocols.SquirrelLabAutoRCNoiseSineProtocol(obj);
-            didSetRig@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj);
+%             didSetRig@vsdLab.protocols.vsdLabAutoRCNoiseSineProtocol(obj);
+            didSetRig@vsdLab.protocols.vsdLabAutoRCProtocol(obj);
             
             [obj.amp, obj.ampType] = obj.createDeviceNamesProperty('Amp');
         end
@@ -30,14 +30,14 @@ classdef vRamp < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.pr
         end
         
         function prepareRun(obj)
-            prepareRun@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj);
+            prepareRun@vsdLab.protocols.vsdLabAutoRCProtocol(obj);
            
-            obj.showFigure('squirrellab.figures.DataFigure', obj.rig.getDevice(obj.amp));
-            obj.showFigure('squirrellab.figures.AverageFigure', obj.rig.getDevice(obj.amp));
-            obj.showFigure('squirrellab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @std}, ...
+            obj.showFigure('vsdLab.figures.DataFigure', obj.rig.getDevice(obj.amp));
+            obj.showFigure('vsdLab.figures.AverageFigure', obj.rig.getDevice(obj.amp));
+            obj.showFigure('vsdLab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @std}, ...
                 'baselineRegion', [0 obj.preTime], ...
                 'measurementRegion', [0 obj.preTime]);
-            obj.showFigure('squirrellab.figures.ProgressFigure', obj.numberOfAverages);
+            obj.showFigure('vsdLab.figures.ProgressFigure', obj.numberOfAverages);
         end
         
         function stim = createAmpStimulus(obj)
@@ -85,7 +85,7 @@ classdef vRamp < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.pr
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabAutoRCProtocol(obj, epoch);
             if obj.runRC
                 % Superclass runs RC epoch
             else %run normally
@@ -95,7 +95,7 @@ classdef vRamp < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.pr
         end
         
         function prepareInterval(obj, interval)
-            prepareInterval@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, interval);
+            prepareInterval@vsdLab.protocols.vsdLabAutoRCProtocol(obj, interval);
             
             device = obj.rig.getDevice(obj.amp);
             interval.addDirectCurrentStimulus(device, device.background, obj.interpulseInterval, obj.sampleRate);

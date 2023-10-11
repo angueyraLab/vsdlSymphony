@@ -1,4 +1,4 @@
-classdef vPulseFamily < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.protocols.SquirrelLabAutoRCNoiseSineProtocol
+classdef vPulseFamily < vsdLab.protocols.vsdLabAutoRCProtocol %vsdLab.protocols.vsdLabAutoRCNoiseSineProtocol
     
     properties
         amp                             % Output amplifier
@@ -23,8 +23,8 @@ classdef vPulseFamily < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirre
     methods
         
         function didSetRig(obj)
-%             didSetRig@squirrellab.protocols.SquirrelLabAutoRCNoiseSineProtocol(obj);
-            didSetRig@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj);
+%             didSetRig@vsdLab.protocols.vsdLabAutoRCNoiseSineProtocol(obj);
+            didSetRig@vsdLab.protocols.vsdLabAutoRCProtocol(obj);
             [obj.amp, obj.ampType] = obj.createDeviceNamesProperty('Amp');
         end
         
@@ -40,24 +40,24 @@ classdef vPulseFamily < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirre
         end
         
         function prepareRun(obj)           
-            prepareRun@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj);
+            prepareRun@vsdLab.protocols.vsdLabAutoRCProtocol(obj);
             
             [obj.nPulses, pulseAmp] = obj.leakParsing;
             
             % Data Figure
-            obj.showFigure('squirrellab.figures.DataFigure', obj.rig.getDevice(obj.amp));
+            obj.showFigure('vsdLab.figures.DataFigure', obj.rig.getDevice(obj.amp));
             % Mean Figure + IV
-            obj.showFigure('squirrellab.figures.vPulseFamilyIVFigure', obj.rig.getDevice(obj.amp), ...
+            obj.showFigure('vsdLab.figures.vPulseFamilyIVFigure', obj.rig.getDevice(obj.amp), ...
                 'prepts',obj.timeToPts(obj.preTime),...
                 'stmpts',obj.timeToPts(obj.stimTime),...
                 'nPulses',double(obj.nPulses),...
                 'pulseAmp',pulseAmp+obj.rig.getDevice(obj.amp).background.quantity,...
                 'groupBy', {'pulseSignal'});
             %Baseline and StD tracking
-            obj.showFigure('squirrellab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @std}, ...
+            obj.showFigure('vsdLab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @std}, ...
                 'baselineRegion', [0 obj.preTime], ...
                 'measurementRegion', [obj.preTime obj.preTime+obj.stimTime]);
-            obj.showFigure('squirrellab.figures.ProgressFigure', obj.numberOfAverages * obj.nPulses);
+            obj.showFigure('vsdLab.figures.ProgressFigure', obj.numberOfAverages * obj.nPulses);
         end
         
         function [stim, pulseSignal] = createAmpStimulus(obj, pulseNum)
@@ -79,7 +79,7 @@ classdef vPulseFamily < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirre
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabAutoRCProtocol(obj, epoch);
             if obj.runRC
                 % Superclass runs RC epoch
             else %run normally
@@ -95,7 +95,7 @@ classdef vPulseFamily < squirrellab.protocols.SquirrelLabAutoRCProtocol %squirre
         end
         
         function prepareInterval(obj, interval)
-            prepareInterval@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, interval);
+            prepareInterval@vsdLab.protocols.vsdLabAutoRCProtocol(obj, interval);
             
             device = obj.rig.getDevice(obj.amp);
             interval.addDirectCurrentStimulus(device, device.background, obj.interpulseInterval, obj.sampleRate);

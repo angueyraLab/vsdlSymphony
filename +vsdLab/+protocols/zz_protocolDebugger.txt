@@ -1,4 +1,4 @@
-g=squirrellab.stimuli.GaussianNoiseGeneratorV2();
+g=vsdLab.stimuli.GaussianNoiseGeneratorV2();
 g.preTime = 100;
 g.stimTime = 500;
 g.tailTime = 100;

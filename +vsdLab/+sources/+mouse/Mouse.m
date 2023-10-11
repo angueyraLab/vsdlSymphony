@@ -1,4 +1,4 @@
-classdef Mouse < squirrellab.sources.Subject
+classdef Mouse < vsdLab.sources.Subject
     
     methods
         

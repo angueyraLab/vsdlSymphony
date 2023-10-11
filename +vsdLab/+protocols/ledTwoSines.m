@@ -1,4 +1,4 @@
-classdef ledTwoSines < squirrellab.protocols.SquirrelLabProtocol
+classdef ledTwoSines < vsdLab.protocols.vsdLabProtocol
     % First epoch: led1 only; Second epoch = led2 only; Third epoch: led1 +
     % led2
     
@@ -30,7 +30,7 @@ classdef ledTwoSines < squirrellab.protocols.SquirrelLabProtocol
     methods
         
         function didSetRig(obj)
-            didSetRig@squirrellab.protocols.SquirrelLabProtocol(obj);
+            didSetRig@vsdLab.protocols.vsdLabProtocol(obj);
             
             [obj.led1, obj.led1Type] = obj.createDeviceNamesProperty('LED');
             [obj.led2, obj.led2Type] = obj.createDeviceNamesProperty('LED');
@@ -51,13 +51,13 @@ classdef ledTwoSines < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareRun(obj)
-            prepareRun@squirrellab.protocols.SquirrelLabProtocol(obj);
+            prepareRun@vsdLab.protocols.vsdLabProtocol(obj);
             
 
-            obj.showFigure('squirrellab.figures.DataFigure', obj.rig.getDevice(obj.amp));
-            obj.showFigure('squirrellab.figures.AverageFigure', obj.rig.getDevice(obj.amp), 'prepts',obj.timeToPts(obj.preTime),...
+            obj.showFigure('vsdLab.figures.DataFigure', obj.rig.getDevice(obj.amp));
+            obj.showFigure('vsdLab.figures.AverageFigure', obj.rig.getDevice(obj.amp), 'prepts',obj.timeToPts(obj.preTime),...
                 'GroupBy',{'PlotGroup'});
-            obj.showFigure('squirrellab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @var}, ...
+            obj.showFigure('vsdLab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @var}, ...
                 'baselineRegion', [0 obj.preTime], ...
                 'measurementRegion', [obj.preTime obj.preTime+obj.stimTime]);
 
@@ -98,7 +98,7 @@ classdef ledTwoSines < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabProtocol(obj, epoch);
              % Add LED stimulus.
             [stim1, stim2] = obj.createLedStimulus(obj.numEpochsPrepared);
             cnt = rem(obj.numEpochsPrepared, 3);
@@ -111,7 +111,7 @@ classdef ledTwoSines < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareInterval(obj, interval)
-            prepareInterval@squirrellab.protocols.SquirrelLabProtocol(obj, interval);
+            prepareInterval@vsdLab.protocols.vsdLabProtocol(obj, interval);
             
             device = obj.rig.getDevice(obj.led1);
             interval.addDirectCurrentStimulus(device, device.background, obj.interpulseInterval, obj.sampleRate);

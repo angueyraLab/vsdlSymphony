@@ -1,10 +1,10 @@
-classdef MkRetCell < squirrellab.sources.RetCell
+classdef MkRetCell < vsdLab.sources.RetCell
     
     methods
         
         function obj = MkRetCell()
             import symphonyui.core.*;
-            obj.addAllowableParentType('squirrellab.sources.monkey.MkRetPrep');
+            obj.addAllowableParentType('vsdLab.sources.monkey.MkRetPrep');
         end
         
     end

@@ -1,4 +1,4 @@
-classdef vNoise <  squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.protocols.SquirrelLabAutoRCNoiseSineProtocol
+classdef vNoise <  vsdLab.protocols.vsdLabAutoRCProtocol %vsdLab.protocols.vsdLabAutoRCNoiseSineProtocol
     % Presents families of gaussian noise stimuli to a specified amplifier and records responses from a specified amplifier.
     % Each family consists of a set of noise stimuli with the standard deviation of noise starting at startStdv. Each
     % standard deviation value is repeated repeatsPerStdv times before moving to the next standard deviation value which
@@ -50,14 +50,14 @@ classdef vNoise <  squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.
         end
         
         function didSetRig(obj)
-%             didSetRig@squirrellab.protocols.SquirrelLabAutoRCNoiseSineProtocol(obj);
-            didSetRig@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj);
+%             didSetRig@vsdLab.protocols.vsdLabAutoRCNoiseSineProtocol(obj);
+            didSetRig@vsdLab.protocols.vsdLabAutoRCProtocol(obj);
             
             [obj.amp, obj.ampType] = obj.createDeviceNamesProperty('Amp');
         end
         
         function d = getPropertyDescriptor(obj, name)
-            d = getPropertyDescriptor@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, name);
+            d = getPropertyDescriptor@vsdLab.protocols.vsdLabAutoRCProtocol(obj, name);
             
             if strncmp(name, 'amp2', 4) && numel(obj.rig.getDeviceNames('Amp')) < 2
                 d.isHidden = true;
@@ -80,15 +80,15 @@ classdef vNoise <  squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.
         end
         
         function prepareRun(obj)
-            prepareRun@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj);
+            prepareRun@vsdLab.protocols.vsdLabAutoRCProtocol(obj);
             
             if numel(obj.rig.getDeviceNames('Amp')) < 2
-                obj.showFigure('squirrellab.figures.DataFigure', obj.rig.getDevice(obj.amp));
-                obj.showFigure('squirrellab.figures.ProgressFigure', obj.numberOfAverages * obj.pulsesInFamily);
-                obj.showFigure('squirrellab.figures.AverageFigure', obj.rig.getDevice(obj.amp), ...
+                obj.showFigure('vsdLab.figures.DataFigure', obj.rig.getDevice(obj.amp));
+                obj.showFigure('vsdLab.figures.ProgressFigure', obj.numberOfAverages * obj.pulsesInFamily);
+                obj.showFigure('vsdLab.figures.AverageFigure', obj.rig.getDevice(obj.amp), ...
                     'prePts', obj.timeToPts(obj.preTime), ...
                     'groupBy', {'stdv'});
-                obj.showFigure('squirrellab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @std}, ...
+                obj.showFigure('vsdLab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @std}, ...
                     'baselineRegion', [0 obj.preTime], ...
                     'measurementRegion', [obj.preTime obj.preTime+obj.stimTime]);
             else
@@ -109,7 +109,7 @@ classdef vNoise <  squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.
             sdNum = floor((double(pulseNum) - 1) / double(obj.repeatsPerStdv));
             stdv = obj.stdvMultiplier^sdNum * obj.startStdv;
             
-            gen = squirrellab.stimuli.GaussianNoiseGeneratorV2();
+            gen = vsdLab.stimuli.GaussianNoiseGeneratorV2();
             
             gen.preTime = obj.preTime;
             gen.stimTime = obj.stimTime;
@@ -126,7 +126,7 @@ classdef vNoise <  squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabAutoRCProtocol(obj, epoch);
             
             persistent seed;
             if ~obj.useRandomSeed
@@ -149,7 +149,7 @@ classdef vNoise <  squirrellab.protocols.SquirrelLabAutoRCProtocol %squirrellab.
         end
         
         function prepareInterval(obj, interval)
-            prepareInterval@squirrellab.protocols.SquirrelLabAutoRCProtocol(obj, interval);
+            prepareInterval@vsdLab.protocols.vsdLabAutoRCProtocol(obj, interval);
             
             device = obj.rig.getDevice(obj.amp);
             interval.addDirectCurrentStimulus(device, device.background, obj.interpulseInterval, obj.sampleRate);

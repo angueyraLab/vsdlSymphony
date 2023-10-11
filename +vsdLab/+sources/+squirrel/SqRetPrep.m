@@ -1,10 +1,10 @@
-classdef SqRetPrep < squirrellab.sources.RetPrep
+classdef SqRetPrep < vsdLab.sources.RetPrep
     
     methods
         
         function obj = SqRetPrep()
             import symphonyui.core.*;
-            obj.addAllowableParentType('squirrellab.sources.squirrel.Squirrel');
+            obj.addAllowableParentType('vsdLab.sources.squirrel.Squirrel');
         end
         
     end

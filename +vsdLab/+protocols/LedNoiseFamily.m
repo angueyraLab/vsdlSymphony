@@ -1,4 +1,4 @@
-classdef ledNoiseFamily < squirrellab.protocols.SquirrelLabProtocol
+classdef ledNoiseFamily < vsdLab.protocols.vsdLabProtocol
     
     properties
         led                             % Output LED
@@ -34,7 +34,7 @@ classdef ledNoiseFamily < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function didSetRig(obj)
-            didSetRig@squirrellab.protocols.SquirrelLabProtocol(obj);
+            didSetRig@vsdLab.protocols.vsdLabProtocol(obj);
             
             [obj.led, obj.ledType] = obj.createDeviceNamesProperty('LED');
             [obj.amp, obj.ampType] = obj.createDeviceNamesProperty('Amp');
@@ -56,11 +56,11 @@ classdef ledNoiseFamily < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareRun(obj)
-            prepareRun@squirrellab.protocols.SquirrelLabProtocol(obj);
+            prepareRun@vsdLab.protocols.vsdLabProtocol(obj);
             
-            obj.showFigure('squirrellab.figures.DataFigure', obj.rig.getDevice(obj.amp));
-            obj.showFigure('squirrellab.figures.AverageFigure', obj.rig.getDevice(obj.amp),'prepts',obj.timeToPts(obj.preTime));
-            obj.showFigure('squirrellab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @var}, ...
+            obj.showFigure('vsdLab.figures.DataFigure', obj.rig.getDevice(obj.amp));
+            obj.showFigure('vsdLab.figures.AverageFigure', obj.rig.getDevice(obj.amp),'prepts',obj.timeToPts(obj.preTime));
+            obj.showFigure('vsdLab.figures.ResponseStatisticsFigure', obj.rig.getDevice(obj.amp), {@mean, @var}, ...
                 'baselineRegion', [0 obj.preTime], ...
                 'measurementRegion', [obj.preTime obj.preTime+obj.stimTime]);
             
@@ -71,7 +71,7 @@ classdef ledNoiseFamily < squirrellab.protocols.SquirrelLabProtocol
             sdNum = floor((double(pulseNum) - 1) / double(obj.repeatsPerStdv));
             stdv = obj.stdvMultiplier^sdNum * obj.startStdv;
             
-            gen = squirrellab.stimuli.GaussianNoiseGenerator();
+            gen = vsdLab.stimuli.GaussianNoiseGenerator();
             
             gen.preTime = obj.preTime;
             gen.stimTime = obj.stimTime;
@@ -90,7 +90,7 @@ classdef ledNoiseFamily < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabProtocol(obj, epoch);
             
             persistent seed;
             if ~obj.useRandomSeed
@@ -109,7 +109,7 @@ classdef ledNoiseFamily < squirrellab.protocols.SquirrelLabProtocol
         end
         
         function prepareInterval(obj, interval)
-            prepareInterval@squirrellab.protocols.SquirrelLabProtocol(obj, interval);
+            prepareInterval@vsdLab.protocols.vsdLabProtocol(obj, interval);
             
             device = obj.rig.getDevice(obj.led);
             interval.addDirectCurrentStimulus(device, device.background, obj.interpulseInterval, obj.sampleRate);
