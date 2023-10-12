@@ -1,4 +1,4 @@
-classdef uLCDMaskSpotGenerator < squirrellab.stimuli.uLCDStimulus
+classdef uLCDMaskSpotGenerator < vsdlab.stimuli.uLCDStimulus
     properties
         preTime             % Spot leading duration (ms)
         stimTime            % Spot duration (ms)

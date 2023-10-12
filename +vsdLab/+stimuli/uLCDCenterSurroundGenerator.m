@@ -1,4 +1,4 @@
-classdef uLCDCenterSurroundGenerator < squirrellab.stimuli.uLCDStimulus
+classdef uLCDCenterSurroundGenerator < vsdlab.stimuli.uLCDStimulus
     properties
         preTime             % Spot leading duration (ms)
         stimTime            % Spot duration (ms)

@@ -1,4 +1,4 @@
-classdef RigA_OneAmpLCR < squirrellab.rigs.RigA_OneAmp
+classdef RigA_OneAmpLCR < vsdlab.rigs.RigA_OneAmp
     
     methods
         
@@ -8,7 +8,7 @@ classdef RigA_OneAmpLCR < squirrellab.rigs.RigA_OneAmp
             
             daq = obj.daqController;
             
-            lightCrafter = squirrellab.devices.LightCrafterDevice('micronsPerPixel', 1.3);
+            lightCrafter = vsdlab.devices.LightCrafterDevice('micronsPerPixel', 1.3);
             lightCrafter.bindStream(daq.getStream('doport1'));
             daq.getStream('doport1').setBitPosition(lightCrafter, 15);
             obj.addDevice(lightCrafter);

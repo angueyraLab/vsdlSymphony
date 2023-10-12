@@ -1,4 +1,4 @@
-classdef (Abstract) SquirrelLabProtocol < symphonyui.core.Protocol
+classdef (Abstract) vsdLabProtocol < symphonyui.core.Protocol
     
     methods
         function prepareEpoch(obj, epoch)

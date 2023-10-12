@@ -1,4 +1,4 @@
-classdef (Abstract) SquirrelLabStageProtocol < io.github.stage_vss.protocols.StageProtocol & squirrellab.protocols.SquirrelLabProtocol
+classdef (Abstract) vsdLabStageProtocol < io.github.stage_vss.protocols.StageProtocol & vsdLab.protocols.vsdLabProtocol
     
     methods (Abstract)
         p = createPresentation(obj);
@@ -7,7 +7,7 @@ classdef (Abstract) SquirrelLabStageProtocol < io.github.stage_vss.protocols.Sta
     methods
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@squirrellab.protocols.SquirrelLabProtocol(obj, epoch);
+            prepareEpoch@vsdlab.protocols.vsdLabProtocol(obj, epoch);
 %             epoch.shouldWaitForTrigger = true; %external trigger start Symphony
             
 %             % frame monitor from spatial stimulus for timing issues

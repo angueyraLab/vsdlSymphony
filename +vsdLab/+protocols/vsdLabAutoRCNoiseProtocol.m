@@ -1,4 +1,4 @@
-classdef (Abstract) SquirrelLabAutoRCNoiseProtocol < squirrellab.protocols.SquirrelLabProtocol
+classdef (Abstract) vsdLabAutoRCNoiseProtocol < vsdLab.protocols.vsdLabProtocol
 % delivers a 5 mV voltage pulse every time protocol is run to keep track
 % of access resistance and membrane capacitance
 
@@ -23,13 +23,13 @@ classdef (Abstract) SquirrelLabAutoRCNoiseProtocol < squirrellab.protocols.Squir
     methods
         
         function prepareRun(obj)
-            prepareRun@squirrellab.protocols.SquirrelLabProtocol(obj);
+            prepareRun@vsdlab.protocols.vsdLabProtocol(obj);
             obj.RCEpochsCompleted = 0;
             obj.RCEpochsPrepared = 0;
             if obj.autoRC
                 obj.runRC = true;
                 % Open RC figure
-                obj.showFigure('squirrellab.figures.RCFigure', @obj.updateFigure);
+                obj.showFigure('vsdlab.figures.RCFigure', @obj.updateFigure);
             else
                 obj.runRC = false;
             end
@@ -118,18 +118,18 @@ classdef (Abstract) SquirrelLabAutoRCNoiseProtocol < squirrellab.protocols.Squir
                     epoch.removeResponse(T5Controller{1});
                 end
             else
-                completeEpoch@squirrellab.protocols.SquirrelLabProtocol(obj, epoch);
+                completeEpoch@vsdlab.protocols.vsdLabProtocol(obj, epoch);
             end 
         end
         
         function completeRun(obj)
-            completeRun@squirrellab.protocols.SquirrelLabProtocol(obj);
+            completeRun@vsdlab.protocols.vsdLabProtocol(obj);
         end
         
         function [seed, stim] = createRCNoiseStimulus(obj)
             
             seed = RandStream.shuffleSeed;
-            gen = squirrellab.stimuli.GaussianNoiseGeneratorV2();
+            gen = vsdlab.stimuli.GaussianNoiseGeneratorV2();
             
             gen.preTime = obj.RCpreTime;
             gen.stimTime = obj.RCstimTime;
