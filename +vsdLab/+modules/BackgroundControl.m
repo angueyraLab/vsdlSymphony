@@ -8,6 +8,7 @@ classdef BackgroundControl < symphonyui.ui.Module
         devices
         deviceListeners
         deviceGrid
+        zeroVcmd
     end
     
     methods
