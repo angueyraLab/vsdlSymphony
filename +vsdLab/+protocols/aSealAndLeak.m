@@ -32,7 +32,7 @@ classdef aSealAndLeak < vsdLab.protocols.vsdLabProtocol
         end
         
         function didSetRig(obj)
-            didSetRig@vsdlab.protocols.vsdLabProtocol(obj);
+            didSetRig@vsdLab.protocols.vsdLabProtocol(obj);
             
             [obj.amp, obj.ampType] = obj.createDeviceNamesProperty('Amp');
         end
@@ -46,7 +46,7 @@ classdef aSealAndLeak < vsdLab.protocols.vsdLabProtocol
         end
         
         function prepareRun(obj)
-            prepareRun@vsdlab.protocols.vsdLabProtocol(obj);
+            prepareRun@vsdLab.protocols.vsdLabProtocol(obj);
             
             if isempty(obj.modeFigure) || ~isvalid(obj.modeFigure)
                 obj.modeFigure = obj.showFigure('symphonyui.builtin.figures.CustomFigure', @null);
@@ -98,7 +98,7 @@ classdef aSealAndLeak < vsdLab.protocols.vsdLabProtocol
         end
         
         function prepareEpoch(obj, epoch)
-            prepareEpoch@vsdlab.protocols.vsdLabProtocol(obj, epoch);
+            prepareEpoch@vsdLab.protocols.vsdLabProtocol(obj, epoch);
             
             devices = obj.rig.getInputDevices();
             for i = 1:numel(devices)
@@ -127,7 +127,7 @@ classdef aSealAndLeak < vsdLab.protocols.vsdLabProtocol
         end
         
         function completeRun(obj)
-            completeRun@vsdlab.protocols.vsdLabProtocol(obj);
+            completeRun@vsdLab.protocols.vsdLabProtocol(obj);
             
             if obj.alternateMode
                 if strcmpi(obj.mode, 'seal')

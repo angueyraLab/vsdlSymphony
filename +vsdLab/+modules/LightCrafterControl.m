@@ -14,7 +14,7 @@ classdef LightCrafterControl < symphonyui.ui.Module
         
         function obj = LightCrafterControl()
             obj.log = log4m.LogManager.getLogger(class(obj));
-            obj.settings = edu.washington.riekelab.modules.settings.LightCrafterControlSettings();
+            obj.settings = vsdLab.modules.settings.LightCrafterControlSettings();
         end
         
         function createUi(obj, figureHandle)

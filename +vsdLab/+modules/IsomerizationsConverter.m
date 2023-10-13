@@ -24,7 +24,7 @@ classdef IsomerizationsConverter < symphonyui.ui.Module
         
         function obj = IsomerizationsConverter()
             obj.log = log4m.LogManager.getLogger(class(obj));
-            obj.settings = edu.washington.riekelab.modules.settings.IsomerizationsConverterSettings();
+            obj.settings = vsdLab.modules.settings.IsomerizationsConverterSettings();
         end
 
         function createUi(obj, figureHandle)
