@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "+vsdLab", "+vsdLab", "{632875B1-7AC5-43C3-BD6C-8C39ED436905}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Symphony.ExternalDevices", "+vsdLab\AMSystemsDevice\Symphony.ExternalDevices.csproj", "{28445023-11AF-41CC-9893-B78C7F2AFC5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Symphony.ExternalDevices.Tests", "+vsdLab\AMSystemsDevice\Symphony.ExternalDevices.Tests.csproj", "{476E6490-B4CD-4044-8DE2-F0716F4045D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28445023-11AF-41CC-9893-B78C7F2AFC5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28445023-11AF-41CC-9893-B78C7F2AFC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28445023-11AF-41CC-9893-B78C7F2AFC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28445023-11AF-41CC-9893-B78C7F2AFC5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{476E6490-B4CD-4044-8DE2-F0716F4045D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{476E6490-B4CD-4044-8DE2-F0716F4045D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{476E6490-B4CD-4044-8DE2-F0716F4045D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{476E6490-B4CD-4044-8DE2-F0716F4045D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{28445023-11AF-41CC-9893-B78C7F2AFC5C} = {632875B1-7AC5-43C3-BD6C-8C39ED436905}
+		{476E6490-B4CD-4044-8DE2-F0716F4045D1} = {632875B1-7AC5-43C3-BD6C-8C39ED436905}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D9EED33-10F3-49FD-8DBB-87873B34B4EE}
+	EndGlobalSection
+EndGlobal
