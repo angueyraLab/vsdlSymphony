@@ -4,11 +4,11 @@ using Symphony.Core;
 
 namespace Symphony.ExternalDevices
 {
-    public interface IAxopatch
+    public interface IAMSystems
     {
         /// <summary>
         /// Interprets the given telegraph reading
         /// </summary>
-        AxopatchInterop.AxopatchData ReadTelegraphData(IDictionary<string, IInputData> data);
+        AMSystemsInterop.AMSystemsData ReadTelegraphData(IDictionary<string, IInputData> data);
     }
 }

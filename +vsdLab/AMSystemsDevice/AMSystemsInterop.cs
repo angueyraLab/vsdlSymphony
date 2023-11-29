@@ -5,7 +5,7 @@ namespace Symphony.ExternalDevices
 {
     public static class AMSystemsInterop
     {
-        public class AxopatchData
+        public class AMSystemsData
         {
             public double Capacitance { get; set; }
             public double Frequency { get; set; }
@@ -13,7 +13,7 @@ namespace Symphony.ExternalDevices
             public OperatingMode OperatingMode { get; set; }
             public double ExternalCommandSensitivity { get; set; }
             public ExternalCommandSensitivityUnits ExternalCommandSensitivityUnits { get; set; }
-
+            public boolean Overload { get; set; }
             public override string ToString()
             {
                 return String.Format("{{ OperatingMode={0}, Gain={1}, ... }}", OperatingMode, Gain);
@@ -22,11 +22,13 @@ namespace Symphony.ExternalDevices
 
         public enum OperatingMode
         {
-            Track,
+            Vtest,
+            VComp,
             VClamp,
             I0,
-            IClampNormal,
-            IClampFast
+            IClamp,
+            IResist,
+            IFollow
         }
 
         public enum ExternalCommandSensitivityUnits

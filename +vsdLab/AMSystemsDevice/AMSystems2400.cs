@@ -1,4 +1,5 @@
 // src/symphony-core/Symphony.ExternalDevices/AMSystems2400.cs
+// Created: Oct 17, 2023 (Angueyra)
 
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,14 @@ namespace Symphony.ExternalDevices
             ExternalScaling = 50; // Depends on switch
         }
 
+// Telegraph outputs include: 
+    // Noise
+    // Freq
+    // Mode
+    // Error
+    // Gain
+    // Cmembrane
+
         public AMSystemsInterop.AMSystemsData ReadTelegraphData(IDictionary<string, IInputData> data)
         {
             var telegraph = new AMSystemsInterop.AMSystemsData();
@@ -35,6 +44,12 @@ namespace Symphony.ExternalDevices
             {
                 var voltage = ReadVoltage(data[AMSystemsDevice.GAIN_TELEGRAPH_STREAM_NAME]);
                 telegraph.Gain = _voltageToGain[Math.Round(voltage * 20) / 20];
+            }
+
+            if (data.ContainsKey(AMSystemsDevice.OVERLOAD_TELEGRAPH_STREAM_NAME))
+            {
+                var voltage = ReadVoltage(data[AMSystemsDevice.OVERLOAD_TELEGRAPH_STREAM_NAME]);
+                telegraph.Overload = _voltageToOverload[Math.Round(voltage * 20) / 20];
             }
 
             if (data.ContainsKey(AMSystemsDevice.MODE_TELEGRAPH_STREAM_NAME))
@@ -81,17 +96,29 @@ namespace Symphony.ExternalDevices
             return measurements.First().Quantity;
         }
 
+        // Cmembrane: Simple conversion: 10pF/V
+        // Noise: Do not understand this output yet; seems to be an rms calculation on probe output, which depends on Rf
+
+        // Error: Overload
+        private readonly IDictionary<decimal, bool> _voltageToOverload = new Dictionary<decimal, bool>
+        {
+            {0m, false},
+            {2.5, true},
+        };
+        
+        // Freq (in kHz)
         private readonly IDictionary<decimal, double> _voltageToFrequency = new Dictionary<decimal, double>
         {
-            {0, 0.5},
-            {1.25, 1},
-            {2.5, 2},
-            {3.75, 5},
-            {5, 10},
-            {6.25, 20},
-            {7.25, 100},
+            {0m, 0.5},
+            {1.25m, 1},
+            {2.5m, 2},
+            {3.75m, 5},
+            {5m, 10},
+            {6.25m, 20},
+            {7.25m, 100},
         };
-
+        
+        // Gain
         private readonly IDictionary<decimal, double> _voltageToGain = new Dictionary<decimal, double>
         {
             {0m, 0.01},
@@ -113,16 +140,17 @@ namespace Symphony.ExternalDevices
             {8.3m, 2000},
             {8.8m, 5000},
         };
-
+        
+        // Mode
         private readonly IDictionary<decimal, AMSystemsInterop.OperatingMode> _voltageToMode = new Dictionary<decimal, AMSystemsInterop.OperatingMode>
         {
-            {0, AMSystemsInterop.OperatingMode.Vtest},
-            {0.8, AMSystemsInterop.OperatingMode.VComp},
-            {1.8, AMSystemsInterop.OperatingMode.VClamp},
-            {2.8, AMSystemsInterop.OperatingMode.I0},
-            {3.8, AMSystemsInterop.OperatingMode.IClamp}
-            {4.8, AMSystemsInterop.OperatingMode.IResist}
-            {5.8, AMSystemsInterop.OperatingMode.IFollow}
+            {0m, AMSystemsInterop.OperatingMode.Vtest},
+            {0.8m, AMSystemsInterop.OperatingMode.VComp},
+            {1.8m, AMSystemsInterop.OperatingMode.VClamp},
+            {2.8m, AMSystemsInterop.OperatingMode.I0},
+            {3.8m, AMSystemsInterop.OperatingMode.IClamp}
+            {4.8m, AMSystemsInterop.OperatingMode.IResist}
+            {5.8m, AMSystemsInterop.OperatingMode.IFollow}
         };
     }
 }
