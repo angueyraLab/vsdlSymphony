@@ -1,5 +1,4 @@
 // src/symphony-core/Symphony.ExternalDevices/AMSystemsDevice.cs
-// Created: Oct 17, 2023 (Angueyra)
 
 using System;
 using System.Collections.Generic;
@@ -23,12 +22,11 @@ namespace Symphony.ExternalDevices
         public const string FREQUENCY_TELEGRAPH_STREAM_NAME = "FREQUENCY_TELEGRAPH";
         public const string GAIN_TELEGRAPH_STREAM_NAME = "GAIN_TELEGRAPH";
         public const string MODE_TELEGRAPH_STREAM_NAME = "MODE_TELEGRAPH";
-        public const string OVERLOAD_TELEGRAPH_STREAM_NAME = "OVERLOAD_TELEGRAPH";
 
-        public AMSystemsDevice(IAMSystems amsystems, Controller c, IDictionary<AMSystemsInterop.OperatingMode, IMeasurement> background)
-            : base("AMSystems", "AM Systems", c)
+        public AMSystemsDevice(IAMSystems AMSystems, Controller c, IDictionary<AMSystemsInterop.OperatingMode, IMeasurement> background)
+            : base("AMSystems", "Molecular Devices", c)
         {
-            AMSystems = amsystems;
+            AMSystems = AMSystems;
 
             c.Started += (sender, args) =>
                 {
@@ -69,7 +67,6 @@ namespace Symphony.ExternalDevices
             result["Frequency"] = deviceParameters.Frequency;
             result["Gain"] = deviceParameters.Gain;
             result["OperatingMode"] = deviceParameters.OperatingMode.ToString();
-            result["Overload"] = deviceParameters.Overload;
 
             return result;
         }
@@ -125,14 +122,12 @@ namespace Symphony.ExternalDevices
         {
             switch (mode)
             {
-                case AMSystemsInterop.OperatingMode.VTest:
-                case AMSystemsInterop.OperatingMode.VComp:
+                case AMSystemsInterop.OperatingMode.Track:
                 case AMSystemsInterop.OperatingMode.VClamp:
                     return -12; //pA
-                case AMSystemsInterop.OperatingMode.IResist:
-                case AMSystemsInterop.OperatingMode.IFollow:
-                case AMSystemsInterop.OperatingMode.IClamp:
                 case AMSystemsInterop.OperatingMode.I0:
+                case AMSystemsInterop.OperatingMode.IClampNormal:
+                case AMSystemsInterop.OperatingMode.IClampFast:
                     return -3; //mV
                 default:
                     throw new ArgumentOutOfRangeException("mode");
@@ -143,14 +138,12 @@ namespace Symphony.ExternalDevices
         {
             switch (mode)
             {
-                case AMSystemsInterop.OperatingMode.VTest:
-                case AMSystemsInterop.OperatingMode.VComp:
+                case AMSystemsInterop.OperatingMode.Track:
                 case AMSystemsInterop.OperatingMode.VClamp:
                     return "A";
-                case AMSystemsInterop.OperatingMode.IResist:
-                case AMSystemsInterop.OperatingMode.IFollow:
-                case AMSystemsInterop.OperatingMode.IClamp:
                 case AMSystemsInterop.OperatingMode.I0:
+                case AMSystemsInterop.OperatingMode.IClampNormal:
+                case AMSystemsInterop.OperatingMode.IClampFast:
                     return "V";
                 default:
                     throw new ArgumentOutOfRangeException("mode");
@@ -166,8 +159,7 @@ namespace Symphony.ExternalDevices
         {
             switch (deviceParams.OperatingMode)
             {
-                case AMSystemsInterop.OperatingMode.VTest:
-                case AMSystemsInterop.OperatingMode.VComp:
+                case AMSystemsInterop.OperatingMode.Track:
                 case AMSystemsInterop.OperatingMode.VClamp:
                     if (String.CompareOrdinal(sample.BaseUnit, "V") != 0)
                     {
@@ -179,10 +171,9 @@ namespace Symphony.ExternalDevices
                         throw new AMSystemsDeviceException("External command units are not V/V as expected for current device mode.");
                     }
                     break;
-                case AMSystemsInterop.OperatingMode.IResist:
-                case AMSystemsInterop.OperatingMode.IFollow:
-                case AMSystemsInterop.OperatingMode.IClamp:
                 case AMSystemsInterop.OperatingMode.I0:
+                case AMSystemsInterop.OperatingMode.IClampNormal:
+                case AMSystemsInterop.OperatingMode.IClampFast:
                     if (String.CompareOrdinal(sample.BaseUnit, "A") != 0)
                     {
                         throw new ArgumentException("Sample units must be in Amps.", "sample");
@@ -199,7 +190,7 @@ namespace Symphony.ExternalDevices
 
             IMeasurement result;
 
-            if (deviceParams.OperatingMode == AMSystemsInterop.OperatingMode.I0 || deviceParams.OperatingMode == AMSystemsInterop.OperatingMode.IFollow)
+            if (deviceParams.OperatingMode == AMSystemsInterop.OperatingMode.I0 || deviceParams.OperatingMode == AMSystemsInterop.OperatingMode.Track)
             {
                 result = MeasurementPool.GetMeasurement(0, 0, "V");
             }

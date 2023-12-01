@@ -10,57 +10,57 @@ namespace Symphony.ExternalDevices
     using NUnit.Framework;
 
     [TestFixture]
-    class AMSystems2400Tests
+    class Axopatch200BTests
     {
         [Test]
         public void ShouldReadSimpleTelegraph()
         {
-            IAMSystems patch = new AMSystems2400();
+            IAxopatch patch = new Axopatch200B();
 
             IDictionary<string, IInputData> data = new Dictionary<string, IInputData>();
 
-            data[AMSystemsDevice.GAIN_TELEGRAPH_STREAM_NAME] = new InputData(Enumerable.Repeat(new Measurement(1.9, "V"), 10), null, DateTimeOffset.Now);
-            data[AMSystemsDevice.MODE_TELEGRAPH_STREAM_NAME] = new InputData(Enumerable.Repeat(new Measurement(6.1, "V"), 10), null, DateTimeOffset.Now);
+            data[AxopatchDevice.GAIN_TELEGRAPH_STREAM_NAME] = new InputData(Enumerable.Repeat(new Measurement(1.9, "V"), 10), null, DateTimeOffset.Now);
+            data[AxopatchDevice.MODE_TELEGRAPH_STREAM_NAME] = new InputData(Enumerable.Repeat(new Measurement(6.1, "V"), 10), null, DateTimeOffset.Now);
 
-            AMSystemsInterop.AMSystemsData telegraph = patch.ReadTelegraphData(data);
+            AxopatchInterop.AxopatchData telegraph = patch.ReadTelegraphData(data);
             Assert.That(telegraph.Gain, Is.EqualTo(0.5));
-            Assert.That(telegraph.OperatingMode, Is.EqualTo(AMSystemsInterop.OperatingMode.VClamp));
+            Assert.That(telegraph.OperatingMode, Is.EqualTo(AxopatchInterop.OperatingMode.VClamp));
             Assert.That(telegraph.ExternalCommandSensitivity, Is.EqualTo(0.02));
-            Assert.That(telegraph.ExternalCommandSensitivityUnits, Is.EqualTo(AMSystemsInterop.ExternalCommandSensitivityUnits.V_V));
+            Assert.That(telegraph.ExternalCommandSensitivityUnits, Is.EqualTo(AxopatchInterop.ExternalCommandSensitivityUnits.V_V));
         }
 
     }
 
     [TestFixture]
-    class AMSystemsDeviceTests
+    class AxopatchDeviceTests
     {
         [Test]
         public void ShouldConvertOutputUnitsInIClamp(
             [Values(
-                AMSystemsInterop.OperatingMode.I0, 
-                AMSystemsInterop.OperatingMode.IClampFast, 
-                AMSystemsInterop.OperatingMode.IClampNormal)] AMSystemsInterop.OperatingMode operatingMode)
+                AxopatchInterop.OperatingMode.I0, 
+                AxopatchInterop.OperatingMode.IClampFast, 
+                AxopatchInterop.OperatingMode.IClampNormal)] AxopatchInterop.OperatingMode operatingMode)
         {
             var c = new Controller();
-            var p = new AMSystems2400();
+            var p = new Axopatch200B();
 
-            var patchDevice = new AMSystemsDevice(p, c, null);
+            var patchDevice = new AxopatchDevice(p, c, null);
 
-            var data = new AMSystemsInterop.AMSystemsData()
+            var data = new AxopatchInterop.AxopatchData()
                 {
                     OperatingMode = operatingMode,
                     ExternalCommandSensitivity = 2.5,
-                    ExternalCommandSensitivityUnits = AMSystemsInterop.ExternalCommandSensitivityUnits.A_V
+                    ExternalCommandSensitivityUnits = AxopatchInterop.ExternalCommandSensitivityUnits.A_V
                 };
 
             var cmd = new Measurement(20, -12, "A");
 
-            var expected = operatingMode == AMSystemsInterop.OperatingMode.I0 ?
+            var expected = operatingMode == AxopatchInterop.OperatingMode.I0 ?
                 new Measurement(0, "V") :
                 new Measurement(cmd.Quantity / (decimal)data.ExternalCommandSensitivity,
                                            cmd.Exponent, "V");
 
-            var actual = AMSystemsDevice.ConvertOutput(cmd, data);
+            var actual = AxopatchDevice.ConvertOutput(cmd, data);
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -68,24 +68,24 @@ namespace Symphony.ExternalDevices
         [Test]
         public void ShouldConvertOutputUnitsInVClamp(
             [Values(
-                AMSystemsInterop.OperatingMode.VClamp,
-                AMSystemsInterop.OperatingMode.Track)] AMSystemsInterop.OperatingMode operatingMode)
+                AxopatchInterop.OperatingMode.VClamp,
+                AxopatchInterop.OperatingMode.Track)] AxopatchInterop.OperatingMode operatingMode)
         {
-            var data = new AMSystemsInterop.AMSystemsData()
+            var data = new AxopatchInterop.AxopatchData()
             {
                 OperatingMode = operatingMode,
                 ExternalCommandSensitivity = 2.5,
-                ExternalCommandSensitivityUnits = AMSystemsInterop.ExternalCommandSensitivityUnits.V_V
+                ExternalCommandSensitivityUnits = AxopatchInterop.ExternalCommandSensitivityUnits.V_V
             };
 
             var cmd = new Measurement(20, -3, "V");
 
-            var expected = operatingMode == AMSystemsInterop.OperatingMode.Track ?
+            var expected = operatingMode == AxopatchInterop.OperatingMode.Track ?
                 new Measurement(0, "V") :
                 new Measurement(cmd.Quantity / (decimal)data.ExternalCommandSensitivity,
                                            cmd.Exponent, "V");
 
-            var actual = AMSystemsDevice.ConvertOutput(cmd, data);
+            var actual = AxopatchDevice.ConvertOutput(cmd, data);
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -93,11 +93,11 @@ namespace Symphony.ExternalDevices
         [Test]
         public void ShouldConvertInputUnitsInVClamp(
             [Values(
-                AMSystemsInterop.OperatingMode.VClamp, 
-                AMSystemsInterop.OperatingMode.Track)] AMSystemsInterop.OperatingMode operatingMode,
+                AxopatchInterop.OperatingMode.VClamp, 
+                AxopatchInterop.OperatingMode.Track)] AxopatchInterop.OperatingMode operatingMode,
             [Values(1, 2, 10)] double gain)
         {
-            var data = new AMSystemsInterop.AMSystemsData()
+            var data = new AxopatchInterop.AxopatchData()
                 {
                     OperatingMode = operatingMode,
                     Gain = gain
@@ -107,7 +107,7 @@ namespace Symphony.ExternalDevices
 
             var expected = new Measurement(cmd.QuantityInBaseUnit/(decimal) gain, -12, "A");
 
-            var actual = AMSystemsDevice.ConvertInput(cmd, data);
+            var actual = AxopatchDevice.ConvertInput(cmd, data);
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -115,12 +115,12 @@ namespace Symphony.ExternalDevices
         [Test]
         public void ShouldConvertInputUnitsInIClamp(
             [Values(
-                AMSystemsInterop.OperatingMode.I0, 
-                AMSystemsInterop.OperatingMode.IClampFast,
-                AMSystemsInterop.OperatingMode.IClampNormal)] AMSystemsInterop.OperatingMode operatingMode,
+                AxopatchInterop.OperatingMode.I0, 
+                AxopatchInterop.OperatingMode.IClampFast,
+                AxopatchInterop.OperatingMode.IClampNormal)] AxopatchInterop.OperatingMode operatingMode,
             [Values(1, 2, 10)] double gain)
         {
-            var data = new AMSystemsInterop.AMSystemsData()
+            var data = new AxopatchInterop.AxopatchData()
                 {
                     OperatingMode = operatingMode,
                     Gain = gain
@@ -130,7 +130,7 @@ namespace Symphony.ExternalDevices
 
             var expected = new Measurement(cmd.QuantityInBaseUnit/(decimal) gain, -3, "V");
 
-            var actual = AMSystemsDevice.ConvertInput(cmd, data);
+            var actual = AxopatchDevice.ConvertInput(cmd, data);
 
             Assert.That(actual, Is.EqualTo(expected));
         }
@@ -145,46 +145,46 @@ namespace Symphony.ExternalDevices
             Measurement IClampBackground = new Measurement(-10, -3, IClampUnits);
 
             var c = new Controller();
-            var p = new FakeAMSystems();
+            var p = new FakeAxopatch();
 
-            var bg = new Dictionary<AMSystemsInterop.OperatingMode, IMeasurement>()
+            var bg = new Dictionary<AxopatchInterop.OperatingMode, IMeasurement>()
                          {
-                             {AMSystemsInterop.OperatingMode.VClamp, VClampBackground},
-                             {AMSystemsInterop.OperatingMode.IClampNormal, IClampBackground},  
+                             {AxopatchInterop.OperatingMode.VClamp, VClampBackground},
+                             {AxopatchInterop.OperatingMode.IClampNormal, IClampBackground},  
                          };
 
-            var patch = new AMSystemsDevice(p, c, bg);
+            var patch = new AxopatchDevice(p, c, bg);
             patch.BindStream(new DAQOutputStream("stream"));
 
-            var data = new AMSystemsInterop.AMSystemsData()
+            var data = new AxopatchInterop.AxopatchData()
             {
-                OperatingMode = AMSystemsInterop.OperatingMode.VClamp,
+                OperatingMode = AxopatchInterop.OperatingMode.VClamp,
                 ExternalCommandSensitivity = 2.5,
-                ExternalCommandSensitivityUnits = AMSystemsInterop.ExternalCommandSensitivityUnits.V_V
+                ExternalCommandSensitivityUnits = AxopatchInterop.ExternalCommandSensitivityUnits.V_V
             };
 
             p.Data = data;
 
-            Assert.That(patch.OutputBackground, Is.EqualTo(AMSystemsDevice.ConvertOutput(VClampBackground, patch.CurrentDeviceParameters)));
+            Assert.That(patch.OutputBackground, Is.EqualTo(AxopatchDevice.ConvertOutput(VClampBackground, patch.CurrentDeviceParameters)));
 
-            data = new AMSystemsInterop.AMSystemsData()
+            data = new AxopatchInterop.AxopatchData()
             {
-                OperatingMode = AMSystemsInterop.OperatingMode.IClampNormal,
+                OperatingMode = AxopatchInterop.OperatingMode.IClampNormal,
                 ExternalCommandSensitivity = 1.5,
-                ExternalCommandSensitivityUnits = AMSystemsInterop.ExternalCommandSensitivityUnits.A_V
+                ExternalCommandSensitivityUnits = AxopatchInterop.ExternalCommandSensitivityUnits.A_V
             };
 
             p.Data = data;
 
-            Assert.That(patch.OutputBackground, Is.EqualTo(AMSystemsDevice.ConvertOutput(IClampBackground, patch.CurrentDeviceParameters)));
+            Assert.That(patch.OutputBackground, Is.EqualTo(AxopatchDevice.ConvertOutput(IClampBackground, patch.CurrentDeviceParameters)));
         }
     }
 
-    internal class FakeAMSystems : IAMSystems
+    internal class FakeAxopatch : IAxopatch
     {
-        public AMSystemsInterop.AMSystemsData Data { get; set; }
+        public AxopatchInterop.AxopatchData Data { get; set; }
 
-        public AMSystemsInterop.AMSystemsData ReadTelegraphData(IDictionary<string, IInputData> data)
+        public AxopatchInterop.AxopatchData ReadTelegraphData(IDictionary<string, IInputData> data)
         {
             return Data;
         }
